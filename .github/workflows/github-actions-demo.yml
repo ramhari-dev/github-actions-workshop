@@ -9,6 +9,18 @@ on:
   pull_request:
     branches:
       - main
-  schedule:
-    - cron: "15 6 * * 7"
   workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Show event and branch name
+      run: |
+        echo "The event that triggered this workflow is ${{ github.event_name }}."
+        echo "The branch is ${{ github.ref }}."
+    - name: List files in repository
+      run: |
+        ls -R
