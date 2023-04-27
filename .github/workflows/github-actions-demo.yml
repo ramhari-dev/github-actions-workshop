@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths-ignore:
-      - ".github/**"
+      - '.github/**'
   pull_request:
     branches:
       - main
@@ -14,13 +14,26 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout
+    - name: Checkout code
       uses: actions/checkout@v2
-    - name: Show event and branch name
-      run: |
-        echo "The event that triggered this workflow is ${{ github.event_name }}."
-        echo "The branch is ${{ github.ref }}."
-    - name: List files in repository
+
+    - name: Print event name
+      run: echo "Event name: ${{ github.event_name }}"
+
+    - name: Print branch name
+      run: echo "Branch name: ${{ github.ref }}"
+
+    - name: List files
       run: |
         ls -R
+
+    - name: Use secret
+      run: echo "Secret value: ${{ secrets.MY_SUPER_SECRET_KEY }}"
+      env:
+        MY_SECRET: ${{ secrets.MY_SUPER_SECRET_KEY }}
+
+    - name: Deploy
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push' && env.MY_SECRET != ''
+      run: echo "Deploying to production"
